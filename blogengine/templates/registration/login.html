@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+   Sign in - {{block.super}}
+{% endblock %}
+
+{% block content %}
+
+
+<form action="{% url 'login' %}" method="post">
+   {% csrf_token %}
+
+     <div class="form-group">
+         {% if form.errors %}
+          <div class="alert alert-danger">
+               {{ form.errors }}
+          </div>
+         {% endif %}
+
+
+         <label for="exampleInputEmail1">Username</label>
+         {{form.username}}
+         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+
+         <label for="exampleInputPassword1">Password</label>
+         {{form.password}}
+         <div class="form-group">
+            <a href="{% url 'registration_url' %}">Have no account?</a>
+         </div>
+         <button type="submit" class="btn btn-primary">Sign in</button>
+     </div>
+</form>
+
+{% endblock %}

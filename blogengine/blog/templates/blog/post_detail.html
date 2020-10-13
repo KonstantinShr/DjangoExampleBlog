@@ -1,0 +1,56 @@
+{% extends 'blog/base_blog.html' %}
+
+{% block title %}
+  {{ post.title }} - {{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+  <h1 class="mt-5">
+    {{ post.title }}
+  </h1>
+  <p>
+    {{ post.body }}
+  </p>
+  {% if request.user.is_authenticated %}
+  <form class="mb-5" action="{% url 'post_detail_url' slug=post.slug %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      {% if comment_form.errors %}
+        <div class="alert alert-danger">
+           {{comment_form.errors}}
+        </div>
+      {% endif %}
+
+      Comment:
+      {{comment_form.body}}
+    </div>
+    <button type="submit" name="button" class="btn btn-primary">Send comment</button>
+  </form>
+  {% endif %}
+
+
+      <p><b>Previous comments:</b></p>
+      {% for comment in post.comments.all %}
+     <div class="card mb-2">
+        <div class="card-header">
+           {{comment.date_pub}}
+        </div>
+        <div class="card-body">
+           <h5 class="card-title">{{comment.user}}</h5>
+           <p class="card-text">{{comment.body}}</p>
+           {% if request.user.is_authenticated and request.user.is_staff %}
+              <a href="{% url 'post_detail_url' slug=post.slug %}" class="btn btn-danger">Delete</a>
+           {% endif %}
+        </div>
+     </div>
+     {% endfor %}
+
+
+
+
+
+
+
+
+{% endblock %}
